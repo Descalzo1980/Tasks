@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.stas.tasks.databinding.FragmentTasksBinding
+import androidx.lifecycle.ViewModelProvider
 
 class TasksFragment : Fragment() {
 
@@ -17,9 +18,15 @@ class TasksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentTasksBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+        val view = binding.root
 
+    val application = requireNotNull(this.activity).application
+    val dao = TaskDatabase.getInstance(application).taskDao
+    val viewModelFactory = TasksViewModelFactory(dao)
+    val viewModel = ViewModelProvider(this,viewModelFactory)[TasksViewModel::class.java]
+        binding.viewModel = viewModel
+        return view
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
