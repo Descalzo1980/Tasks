@@ -6,25 +6,23 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [Task::class], version = 1, exportSchema = false)
-abstract class TaskDatabase : RoomDatabase(){
-    abstract val taskDao : TaskDao
-
-    companion object{
+abstract class TaskDatabase : RoomDatabase() {
+    abstract val taskDao: TaskDao
+    companion object {
         @Volatile
-        private var INSTANCE : TaskDatabase? = null
-
-        fun getInstance(context: Context): TaskDatabase{
-            synchronized(this){
-                var instant = INSTANCE
-                if(instant == null){
-                    instant = Room.databaseBuilder(
+        private var INSTANCE: TaskDatabase? = null
+        fun getInstance(context: Context): TaskDatabase {
+            synchronized(this) {
+                var instance = INSTANCE
+                if (instance == null) {
+                    instance = Room.databaseBuilder(
                         context.applicationContext,
                         TaskDatabase::class.java,
                         "tasks_database"
                     ).build()
-                    INSTANCE = instant
+                    INSTANCE = instance
                 }
-                return instant
+                return instance
             }
         }
     }
